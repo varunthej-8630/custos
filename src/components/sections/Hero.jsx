@@ -221,7 +221,7 @@ export default function Hero() {
       }} />
 
       {/* HTML Content */}
-      <div style={{
+      <div className="hero-content-inner" style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
@@ -242,7 +242,28 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Main headline */}
+        <style>{`
+        @media (max-width: 768px) {
+          .hero-content-inner {
+            text-align: center !important;
+            align-items: center !important;
+            padding: 100px 20px 60px !important;
+          }
+          .hero-content-inner h1 { font-size: 36px !important; }
+          .hero-content-inner p { font-size: 15px !important; }
+          .hero-btn-group {
+            flex-direction: column !important;
+            align-items: center !important;
+            width: 100% !important;
+          }
+          .hero-btn-group a {
+            width: 100% !important;
+            max-width: 280px !important;
+            text-align: center !important;
+            justify-content: center !important;
+          }
+        }
+      `}</style>
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -298,6 +319,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
           style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}
+          className="hero-btn-group"
         >
           <a
             href="https://wa.me/917416636417?text=Hi%2C%20I%20want%20to%20know%20more%20about%20Custos!"

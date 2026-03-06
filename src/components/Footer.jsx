@@ -17,7 +17,13 @@ export default function Footer() {
     }}>
       <style>{`
         @media (max-width: 768px) {
-          footer { padding: 32px 24px; flex-direction: column; text-align: center; }
+          footer {
+            padding: 32px 20px !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+          }
+          .footer-contact { align-items: center !important; }
         }
         .footer-link { color: rgba(255,255,255,0.4); text-decoration: none; font-family: 'DM Sans'; font-size: 13px; transition: color 0.2s; }
         .footer-link:hover { color: #fff; }
@@ -43,7 +49,7 @@ export default function Footer() {
       </div>
 
       {/* Contact info */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+      <div className="footer-contact" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
         <a href="mailto:p.varunthej@gmail.com" style={{
           fontFamily: 'DM Sans', fontSize: '12px',
           color: 'rgba(0,200,255,0.5)', textDecoration: 'none'

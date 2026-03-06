@@ -15,277 +15,155 @@ export default function Navbar() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap');
-
-        .navbar-wrapper {
-          position: fixed;
-          top: 16px;
-          left: 0;
-          right: 0;
-          z-index: 1000;
-          display: flex;
-          justify-content: center;
-          padding: 0 24px;
-          pointer-events: none;
-        }
-
         .navbar {
-          pointer-events: all;
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 8px;
-          padding: 10px 12px;
-          border-radius: 22px;
-          max-width: 820px;
-          width: 100%;
-          overflow: hidden;
-          background: rgba(255, 255, 255, 0.04);
-          backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
-          -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
-          border: 1px solid rgba(255, 255, 255, 0.13);
-          box-shadow:
-            0 8px 40px rgba(0, 0, 0, 0.45),
-            inset 0 1.5px 0 rgba(255, 255, 255, 0.18),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-            0 0 0 0.5px rgba(0, 200, 255, 0.06);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          position: fixed; top: 0; left: 0; right: 0;
+          z-index: 100;
+          padding: 18px 80px;
+          display: flex; align-items: center; justify-content: space-between;
+          background: rgba(0,0,0,0.7);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          transition: background 0.3s;
         }
-
-        .navbar::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 50%;
-          background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.00) 100%);
-          border-radius: 22px 22px 0 0;
-          pointer-events: none;
-        }
-
-        .navbar::after {
-          content: '';
-          position: absolute;
-          bottom: 0; left: 10%; right: 10%;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-          pointer-events: none;
-        }
-
-        .navbar.scrolled {
-          background: rgba(255, 255, 255, 0.055);
-          box-shadow:
-            0 12px 48px rgba(0, 0, 0, 0.6),
-            inset 0 1.5px 0 rgba(255, 255, 255, 0.2),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-            0 0 0 0.5px rgba(0, 200, 255, 0.1);
-        }
-
+        .navbar.scrolled { background: rgba(0,0,0,0.9); }
         .nav-logo {
           font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: 15px;
+          font-weight: 700;
+          font-size: 20px;
           letter-spacing: 4px;
           color: #fff;
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          display: flex; align-items: center; gap: 8px;
           text-decoration: none;
-          white-space: nowrap;
-          flex-shrink: 0;
-          padding: 6px 14px;
-          border-radius: 14px;
-          transition: background 0.2s;
         }
-
-        .nav-logo:hover { background: rgba(255,255,255,0.06); }
-
-        .nav-logo .dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #00C8FF;
-          box-shadow: 0 0 6px rgba(0,200,255,1), 0 0 12px rgba(0,200,255,0.5);
-          flex-shrink: 0;
-        }
-
+        .nav-logo .dot { color: #00C8FF; font-size: 8px; }
         .nav-links {
-          display: flex;
-          gap: 2px;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          flex: 1;
-          justify-content: center;
+          display: flex; gap: 32px; list-style: none;
         }
-
         .nav-links a {
           font-family: 'DM Sans', sans-serif;
           font-size: 13px;
-          font-weight: 400;
-          color: rgba(255,255,255,0.5);
+          color: rgba(255,255,255,0.6);
           text-decoration: none;
-          padding: 7px 13px;
-          border-radius: 12px;
-          transition: all 0.2s ease;
-          white-space: nowrap;
-          display: block;
+          transition: color 0.2s, text-shadow 0.2s;
         }
-
         .nav-links a:hover {
-          color: rgba(255,255,255,0.95);
-          background: rgba(255,255,255,0.08);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+          color: #fff;
+          text-shadow: 0 0 8px rgba(0,200,255,0.5);
         }
-
-        .nav-cta a { display: block; text-decoration: none; }
-
-        .nav-cta button {
+        .nav-cta {
           position: relative;
-          background: rgba(255,255,255,0.09);
-          color: rgba(255,255,255,0.9);
-          border: 1px solid rgba(255,255,255,0.14);
-          padding: 8px 18px;
+          border: 0.6px solid rgba(255,255,255,0.3);
+          border-radius: 100px;
+          overflow: hidden;
+          transition: border-color 0.3s;
+        }
+        .nav-cta:hover { border-color: rgba(0,200,255,0.6); }
+        .nav-cta::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 50%;
+          transform: translateX(-50%);
+          width: 50%; height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        }
+        .nav-cta:hover::before {
+          background: linear-gradient(90deg, transparent, rgba(0,200,255,0.6), transparent);
+        }
+        .nav-cta button {
+          background: #000;
+          color: #fff;
+          border: none;
+          padding: 10px 24px;
           font-family: 'DM Sans', sans-serif;
           font-size: 13px;
           font-weight: 500;
           cursor: pointer;
-          border-radius: 14px;
-          white-space: nowrap;
-          transition: all 0.25s ease;
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.15),
-            inset 0 -1px 0 rgba(0,0,0,0.2);
-          overflow: hidden;
+          border-radius: 100px;
         }
-
-        .nav-cta button::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 50%;
-          background: linear-gradient(180deg, rgba(255,255,255,0.07), transparent);
-          pointer-events: none;
-        }
-
-        .nav-cta button:hover {
-          background: rgba(0,200,255,0.12);
-          border-color: rgba(0,200,255,0.35);
-          color: #fff;
-          box-shadow:
-            0 0 20px rgba(0,200,255,0.15),
-            inset 0 1px 0 rgba(0,200,255,0.2),
-            inset 0 -1px 0 rgba(0,0,0,0.2);
-        }
-
         .hamburger {
           display: none;
           flex-direction: column;
-          gap: 4.5px;
+          gap: 5px;
           cursor: pointer;
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 10px;
-          padding: 8px;
-          flex-shrink: 0;
-          transition: background 0.2s;
+          background: none;
+          border: none;
+          padding: 4px;
         }
-
-        .hamburger:hover { background: rgba(255,255,255,0.1); }
-
         .hamburger span {
           display: block;
-          width: 18px;
+          width: 24px;
           height: 1.5px;
-          background: rgba(255,255,255,0.8);
-          border-radius: 2px;
+          background: #fff;
+          transition: transform 0.3s;
         }
-
         .mobile-menu {
           display: none;
           position: fixed;
-          top: 76px;
-          left: 12px;
-          right: 12px;
-          background: rgba(10, 10, 10, 0.75);
-          backdrop-filter: blur(40px) saturate(200%);
-          -webkit-backdrop-filter: blur(40px) saturate(200%);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 20px;
-          padding: 10px;
+          top: 64px; left: 0; right: 0;
+          background: rgba(0,0,0,0.95);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+          padding: 24px;
           flex-direction: column;
-          gap: 2px;
-          z-index: 999;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.12);
+          gap: 20px;
+          z-index: 99;
         }
-
         .mobile-menu.open { display: flex; }
-
         .mobile-menu a {
-          color: rgba(255,255,255,0.65);
+          color: rgba(255,255,255,0.7);
           text-decoration: none;
           font-family: 'DM Sans', sans-serif;
           font-size: 15px;
-          padding: 13px 18px;
-          border-radius: 13px;
-          transition: all 0.2s;
-          display: block;
         }
-
-        .mobile-menu a:hover {
-          background: rgba(255,255,255,0.07);
-          color: #fff;
-        }
-
         @media (max-width: 768px) {
-          .navbar-wrapper { top: 10px; padding: 0 10px; }
+          .navbar { padding: 18px 20px; }
           .nav-links { display: none; }
           .hamburger { display: flex; }
-          .navbar { padding: 8px 10px; }
+          .nav-cta { display: none; }
         }
       `}</style>
 
-      <div className="navbar-wrapper">
-        <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-          <a href="#" className="nav-logo">
-            <span className="dot" />
-            CUSTOS
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <a href="#" className="nav-logo">
+          <span className="dot">●</span>CUSTOS
+        </a>
+        <ul className="nav-links">
+          {links.map((link) => (
+            <li key={link}>
+              <a href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}>{link}</a>
+            </li>
+          ))}
+        </ul>
+        <div className="nav-cta">
+          <a
+            href="https://wa.me/917416636417?text=Hi%2C%20I%27d%20like%20to%20request%20access%20to%20Custos!"
+            target="_blank" rel="noopener noreferrer"
+          >
+            <button>Request Access</button>
           </a>
-
-          <ul className="nav-links">
-            {links.map((link) => (
-              <li key={link}>
-                <a href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}>{link}</a>
-              </li>
-            ))}
-          </ul>
-
-          <div className="nav-cta">
-            <a
-              href="https://wa.me/917416636417?text=Hi%2C%20I%27d%20like%20to%20request%20access%20to%20Custos!"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button>Request Access</button>
-            </a>
-          </div>
-
-          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-            <span /><span /><span />
-          </button>
-        </nav>
-      </div>
+        </div>
+        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          <span />
+          <span />
+          <span />
+        </button>
+      </nav>
 
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         {links.map((link) => (
-          <a
-            key={link}
-            href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
-            onClick={() => setMenuOpen(false)}
-          >
+          <a key={link} href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+             onClick={() => setMenuOpen(false)}>
             {link}
           </a>
         ))}
+        <a
+          href="https://wa.me/917416636417?text=Hi%2C%20I%27d%20like%20to%20request%20access%20to%20Custos!"
+          target="_blank" rel="noopener noreferrer"
+          style={{ color: '#00C8FF', fontWeight: 600, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '16px', marginTop: '4px' }}
+          onClick={() => setMenuOpen(false)}
+        >
+          Request Access →
+        </a>
       </div>
     </>
   )

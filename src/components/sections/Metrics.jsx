@@ -15,7 +15,7 @@ export default function Metrics() {
       <div style={{
         maxWidth: '1200px', margin: '0 auto',
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
       }}>
         {metrics.map((m, i) => (
           <div key={i} className="reveal" style={{

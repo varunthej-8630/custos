@@ -101,7 +101,7 @@ export default function Solution() {
         {/* Feature list */}
         <div className="reveal" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
           gap: '12px 40px',
           maxWidth: '680px',
           margin: '0 auto'

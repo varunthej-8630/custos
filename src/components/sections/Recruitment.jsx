@@ -7,7 +7,20 @@ const roles = [
 
 export default function Recruitment() {
   return (
-    <section className="section-wrapper" style={{ padding: '120px 0' }}>
+    <section id="join-the-mission" className="section-wrapper" style={{ padding: '120px 0' }}>
+      <style>{`
+        .recruitment-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 16px;
+          margin-bottom: 48px;
+        }
+        @media (max-width: 640px) {
+          .recruitment-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       <div className="section">
         <div style={{ textAlign: 'center', marginBottom: '64px' }}>
           <div className="reveal" style={{ marginBottom: '20px' }}>
@@ -27,11 +40,7 @@ export default function Recruitment() {
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '16px', marginBottom: '48px'
-        }}>
+        <div className="recruitment-grid">
           {roles.map((role, i) => (
             <div key={i} className="glass-card reveal" style={{ padding: '28px' }}>
               <div style={{ fontSize: '28px', marginBottom: '12px' }}>{role.icon}</div>

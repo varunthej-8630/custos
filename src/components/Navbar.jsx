@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react'
 
-const links = ['How It Works', 'Intelligence', 'Ecosystem', 'Vision', 'Founder']
+const links = [
+  { label: 'How It Works', id: 'how-it-works' },
+  { label: 'Intelligence', id: 'intelligence' },
+  { label: 'Ecosystem', id: 'ecosystem' },
+  { label: 'Vision', id: 'vision' },
+  { label: 'Founder', id: 'founder' },
+  { label: 'Join Mission', id: 'join-the-mission' },
+  { label: 'Your Story', id: 'tell-your-story' },
+]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -38,7 +46,7 @@ export default function Navbar() {
           gap: 8px;
           padding: 10px 12px;
           border-radius: 22px;
-          max-width: 820px;
+          max-width: 900px;
           width: 100%;
           overflow: hidden;
           background: rgba(255, 255, 255, 0.04);
@@ -117,15 +125,16 @@ export default function Navbar() {
           padding: 0;
           flex: 1;
           justify-content: center;
+          flex-wrap: nowrap;
         }
 
         .nav-links a {
           font-family: 'DM Sans', sans-serif;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 400;
           color: rgba(255,255,255,0.5);
           text-decoration: none;
-          padding: 7px 13px;
+          padding: 7px 10px;
           border-radius: 12px;
           transition: all 0.2s ease;
           white-space: nowrap;
@@ -237,6 +246,15 @@ export default function Navbar() {
           color: #fff;
         }
 
+        /* Special highlight for Join Mission link */
+        .nav-join {
+          color: rgba(0,200,255,0.8) !important;
+        }
+        .nav-join:hover {
+          color: #00C8FF !important;
+          background: rgba(0,200,255,0.08) !important;
+        }
+
         @media (max-width: 768px) {
           .navbar-wrapper { top: 10px; padding: 0 10px; }
           .nav-links { display: none; }
@@ -254,8 +272,13 @@ export default function Navbar() {
 
           <ul className="nav-links">
             {links.map((link) => (
-              <li key={link}>
-                <a href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}>{link}</a>
+              <li key={link.id}>
+                <a
+                  href={`#${link.id}`}
+                  className={link.id === 'join-the-mission' ? 'nav-join' : ''}
+                >
+                  {link.label}
+                </a>
               </li>
             ))}
           </ul>
@@ -276,16 +299,34 @@ export default function Navbar() {
         </nav>
       </div>
 
+      {/* Mobile menu */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         {links.map((link) => (
           <a
-            key={link}
-            href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+            key={link.id}
+            href={`#${link.id}`}
             onClick={() => setMenuOpen(false)}
+            style={link.id === 'join-the-mission' ? { color: 'rgba(0,200,255,0.8)' } : {}}
           >
-            {link}
+            {link.label}
           </a>
         ))}
+        <a
+          href="https://wa.me/917416636417?text=Hi%2C%20I%27d%20like%20to%20request%20access%20to%20Custos!"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setMenuOpen(false)}
+          style={{
+            marginTop: '8px',
+            background: 'rgba(0,200,255,0.1)',
+            border: '1px solid rgba(0,200,255,0.3)',
+            borderRadius: '12px',
+            color: '#00C8FF',
+            textAlign: 'center',
+          }}
+        >
+          Request Access
+        </a>
       </div>
     </>
   )

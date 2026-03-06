@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 
-// ── SVG Scenes ────────────────────────────────────────────────
-
 function SceneIntruder() {
   return (
     <svg width="100%" height="100%" viewBox="0 0 760 380" style={{ position: 'absolute', inset: 0 }}>
@@ -199,72 +197,29 @@ export default function AIIntelligence() {
   const Scene = SCENES[activeTab]
 
   return (
-    <section className="section-wrapper" style={{ padding: '120px 0', background: 'transparent' }}>
+    <section id="intelligence" className="section-wrapper" style={{ padding: '120px 0', background: 'transparent' }}>
       <style>{`
-        .ai-viewport {
-          height: 380px;
-        }
-        .ai-tabs-wrap {
-          display: flex;
-          gap: 8px;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
+        .ai-viewport { height: 380px; }
+        .ai-tabs-wrap { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
         .ai-tab-btn {
-          background: transparent;
-          border-radius: 100px;
-          padding: 8px 16px;
-          cursor: pointer;
-          font-family: DM Sans, sans-serif;
-          font-size: 13px;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          white-space: nowrap;
+          background: transparent; border-radius: 100px; padding: 8px 16px;
+          cursor: pointer; font-family: DM Sans, sans-serif; font-size: 13px;
+          transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; white-space: nowrap;
         }
-        /* Mobile: scrollable tab row */
+        .ai-tab-label-short { display: none; }
         @media (max-width: 640px) {
-          .ai-viewport {
-            height: 260px !important;
-          }
-          .ai-tabs-wrap {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 6px !important;
-            justify-items: stretch !important;
-          }
-          .ai-tab-btn {
-            padding: 7px 10px !important;
-            font-size: 11px !important;
-            justify-content: center !important;
-            text-align: center !important;
-          }
-          .ai-tab-label-full {
-            display: none;
-          }
-          .ai-tab-label-short {
-            display: inline !important;
-          }
-          .ai-behavior-text {
-            font-size: 8px !important;
-            max-width: 60% !important;
-          }
-          .ai-status-text {
-            font-size: 8px !important;
-            padding: 2px 5px !important;
-          }
-          .ai-timestamp {
-            font-size: 9px !important;
-          }
-        }
-        .ai-tab-label-short {
-          display: none;
+          .ai-viewport { height: 260px !important; }
+          .ai-tabs-wrap { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; justify-items: stretch !important; }
+          .ai-tab-btn { padding: 7px 10px !important; font-size: 11px !important; justify-content: center !important; }
+          .ai-tab-label-full { display: none; }
+          .ai-tab-label-short { display: inline !important; }
+          .ai-behavior-text { font-size: 8px !important; max-width: 60% !important; }
+          .ai-status-text { font-size: 8px !important; padding: 2px 5px !important; }
+          .ai-timestamp { font-size: 9px !important; }
         }
       `}</style>
 
       <div className="section">
-
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <div className="reveal" style={{ marginBottom: '20px' }}>
             <div className="label-pill">WHAT CUSTOS SEES</div>
@@ -277,82 +232,47 @@ export default function AIIntelligence() {
           </p>
         </div>
 
-        {/* Camera viewport */}
         <div className="reveal" style={{ maxWidth: '760px', margin: '0 auto 40px' }}>
-          <div className="ai-viewport" style={{
-            background: '#0a0a0a',
-            border: '1px solid rgba(0,200,255,0.15)',
-            borderRadius: '16px',
-            position: 'relative',
-            overflow: 'hidden',
-          }}>
-            {/* Scanlines */}
+          <div className="ai-viewport" style={{ background: '#0a0a0a', border: '1px solid rgba(0,200,255,0.15)', borderRadius: '16px', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,200,255,0.012) 2px, rgba(0,200,255,0.012) 4px)', pointerEvents: 'none', zIndex: 5 }} />
-
-            {/* Corner brackets */}
             {[
               { top: '12px', left: '12px', borderTop: '2px solid rgba(0,200,255,0.6)', borderLeft: '2px solid rgba(0,200,255,0.6)' },
               { top: '12px', right: '12px', borderTop: '2px solid rgba(0,200,255,0.6)', borderRight: '2px solid rgba(0,200,255,0.6)' },
               { bottom: '12px', left: '12px', borderBottom: '2px solid rgba(0,200,255,0.6)', borderLeft: '2px solid rgba(0,200,255,0.6)' },
               { bottom: '12px', right: '12px', borderBottom: '2px solid rgba(0,200,255,0.6)', borderRight: '2px solid rgba(0,200,255,0.6)' },
-            ].map((s, i) => (
-              <div key={i} style={{ position: 'absolute', width: '20px', height: '20px', zIndex: 6, ...s }} />
-            ))}
-
-            {/* Timestamp */}
+            ].map((s, i) => <div key={i} style={{ position: 'absolute', width: '20px', height: '20px', zIndex: 6, ...s }} />)}
             <div className="ai-timestamp" style={{ position: 'absolute', top: '16px', left: '24px', fontFamily: 'monospace', fontSize: '11px', color: '#00FF00', zIndex: 6 }}>
               CAM_0{activeTab + 1} | LIVE | {new Date().toTimeString().slice(0, 8)}
             </div>
-
-            {/* Status */}
             <div className="ai-status-text" style={{ position: 'absolute', top: '16px', right: '24px', background: tab.statusColor + '22', border: '1px solid ' + tab.statusColor + '66', color: tab.statusColor, fontFamily: 'monospace', fontSize: '10px', padding: '3px 8px', borderRadius: '4px', zIndex: 6, letterSpacing: '1px' }}>
               {tab.status}
             </div>
-
-            {/* Behavior */}
             <div className="ai-behavior-text" style={{ position: 'absolute', bottom: '16px', left: '24px', fontFamily: 'monospace', fontSize: '10px', color: tab.statusColor, zIndex: 6, background: 'rgba(0,0,0,0.8)', padding: '4px 8px', borderRadius: '4px' }}>
               {tab.behavior}
             </div>
-
-            {/* REC */}
             <div style={{ position: 'absolute', bottom: '16px', right: '24px', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'monospace', fontSize: '10px', color: '#FF3B30', zIndex: 6 }}>
               <div className="pulse-dot" style={{ background: '#FF3B30' }} /> REC
             </div>
-
-            {/* SVG Scene */}
-            <div key={activeTab} className="tab-content" style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-              <Scene />
-            </div>
-
-            {/* Bounding boxes */}
+            <div key={activeTab} className="tab-content" style={{ position: 'absolute', inset: 0, zIndex: 1 }}><Scene /></div>
             <div style={{ position: 'absolute', inset: 0, zIndex: 4 }}>
-              {tab.detections.map((det, i) => (
-                <BoundingBox key={activeTab + '-' + i} det={det} idx={i} />
-              ))}
+              {tab.detections.map((det, i) => <BoundingBox key={activeTab + '-' + i} det={det} idx={i} />)}
             </div>
           </div>
         </div>
 
-        {/* Tabs — 3-column grid on mobile, wrap on desktop */}
         <div className="reveal ai-tabs-wrap">
           {tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id)}
-              className="ai-tab-btn"
-              style={{
-                background: activeTab === t.id ? 'rgba(0,200,255,0.1)' : 'transparent',
-                border: '1px solid ' + (activeTab === t.id ? 'rgba(0,200,255,0.4)' : 'rgba(255,255,255,0.08)'),
-                color: activeTab === t.id ? '#fff' : 'rgba(255,255,255,0.5)',
-              }}
-            >
+            <button key={t.id} onClick={() => setActiveTab(t.id)} className="ai-tab-btn" style={{
+              background: activeTab === t.id ? 'rgba(0,200,255,0.1)' : 'transparent',
+              border: '1px solid ' + (activeTab === t.id ? 'rgba(0,200,255,0.4)' : 'rgba(255,255,255,0.08)'),
+              color: activeTab === t.id ? '#fff' : 'rgba(255,255,255,0.5)',
+            }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: t.dot, display: 'inline-block', flexShrink: 0 }} />
               <span className="ai-tab-label-full">{t.fullLabel}</span>
               <span className="ai-tab-label-short">{t.label}</span>
             </button>
           ))}
         </div>
-
       </div>
     </section>
   )

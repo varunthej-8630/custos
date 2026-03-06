@@ -15,6 +15,60 @@ const features = [
 export default function Solution() {
   return (
     <section className="section-wrapper" style={{ background: 'transparent', padding: '120px 0' }}>
+      <style>{`
+        .solution-flow {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 64px;
+          flex-wrap: nowrap;
+          gap: 0;
+        }
+        .solution-step {
+          min-width: 120px;
+          padding: 24px;
+        }
+        .solution-arrow {
+          width: 64px;
+          height: 2px;
+          flex-shrink: 0;
+          position: relative;
+        }
+        .solution-features {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px 40px;
+          max-width: 680px;
+          margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+          .solution-flow {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 0 !important;
+          }
+          .solution-flow > div {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+          }
+          .solution-arrow {
+            width: 2px !important;
+            height: 40px !important;
+            background: linear-gradient(to bottom, var(--from-color), var(--to-color)) !important;
+          }
+          .solution-step {
+            min-width: 140px !important;
+            padding: 20px 28px !important;
+          }
+          .solution-features {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+          }
+        }
+      `}</style>
+
       <div className="section">
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '72px' }}>
@@ -36,21 +90,19 @@ export default function Solution() {
         </div>
 
         {/* Flow diagram */}
-        <div className="reveal" style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          marginBottom: '64px', flexWrap: 'wrap', gap: '8px'
-        }}>
+        <div className="reveal solution-flow">
           {steps.map((step, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
               {/* Step node */}
-              <div className="glass-card" style={{
-                padding: '24px',
-                textAlign: 'center',
-                minWidth: '120px',
-                border: `1px solid ${step.glow}`,
-                boxShadow: `0 0 20px ${step.glow}, inset 0 1px 0 rgba(255,255,255,0.1)`,
-                position: 'relative',
-              }}>
+              <div
+                className="glass-card solution-step"
+                style={{
+                  textAlign: 'center',
+                  border: `1px solid ${step.glow}`,
+                  boxShadow: `0 0 20px ${step.glow}, inset 0 1px 0 rgba(255,255,255,0.1)`,
+                  position: 'relative',
+                }}
+              >
                 <div style={{ fontSize: '28px', marginBottom: '10px' }}>{step.icon}</div>
                 <div style={{
                   fontFamily: 'Syne, sans-serif', fontWeight: 700,
@@ -70,12 +122,14 @@ export default function Solution() {
 
               {/* Arrow connector */}
               {i < steps.length - 1 && (
-                <div style={{
-                  position: 'relative', width: '64px', height: '2px',
-                  background: `linear-gradient(90deg, ${steps[i].glow}, ${steps[i+1].glow})`,
-                  flexShrink: 0,
-                }}>
-                  {/* Traveling dot */}
+                <div
+                  className="solution-arrow"
+                  style={{
+                    '--from-color': steps[i].glow,
+                    '--to-color': steps[i + 1].glow,
+                    background: `linear-gradient(90deg, ${steps[i].glow}, ${steps[i + 1].glow})`,
+                  }}
+                >
                   <div style={{
                     position: 'absolute', top: '50%',
                     width: '6px', height: '6px',
@@ -99,13 +153,7 @@ export default function Solution() {
         </div>
 
         {/* Feature list */}
-        <div className="reveal" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '12px 40px',
-          maxWidth: '680px',
-          margin: '0 auto'
-        }}>
+        <div className="reveal solution-features">
           {features.map((f, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: '10px',

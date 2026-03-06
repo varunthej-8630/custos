@@ -5,11 +5,37 @@ export default function Problem() {
     { icon: '👁', title: 'No Intelligence', desc: 'A camera sees everything. It understands nothing.', span: 1 },
     { icon: '⏱', title: 'Delayed Alerts', desc: 'By the time you know something happened, it already did.', span: 2 },
     { icon: '📌', title: 'Fixed Angles', desc: 'Blind spots everywhere. Criminals know where cameras point.', span: 1 },
-    { icon: '🚨', title: 'No Escalation', desc: 'If you don\'t respond, nothing happens. No backup. No action.', span: 1 },
+    { icon: '🚨', title: 'No Escalation', desc: "If you don't respond, nothing happens. No backup. No action.", span: 1 },
   ]
 
   return (
     <section className="section-wrapper" style={{ padding: '120px 0', position: 'relative', background: 'transparent' }}>
+      <style>{`
+        .problem-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+        .problem-card-span-2 { grid-column: span 2; }
+        .problem-card-span-1 { grid-column: span 1; }
+
+        @media (max-width: 640px) {
+          .problem-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .problem-card-span-2 {
+            grid-column: span 1 !important;
+          }
+          .problem-card-span-1 {
+            grid-column: span 1 !important;
+          }
+          .problem-card {
+            padding: 20px !important;
+          }
+        }
+      `}</style>
+
       {/* Danger blob */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
@@ -42,23 +68,17 @@ export default function Problem() {
         </div>
 
         {/* Card grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '16px',
-        }}>
+        <div className="problem-grid">
           {cards.map((card, i) => (
             <div
               key={i}
-              className="glass-card reveal"
+              className={`glass-card reveal problem-card problem-card-span-${card.span}`}
               style={{
-                gridColumn: `span ${card.span}`,
                 padding: '28px',
                 position: 'relative',
                 overflow: 'hidden',
               }}
             >
-              {/* Subtle red tint on hover handled via CSS */}
               <div style={{ fontSize: '28px', marginBottom: '12px' }}>{card.icon}</div>
               <h3 style={{
                 fontFamily: 'Syne, sans-serif',
@@ -85,12 +105,6 @@ export default function Problem() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .problem-grid > div { grid-column: span 1 !important; }
-        }
-      `}</style>
     </section>
   )
 }

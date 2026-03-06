@@ -12,16 +12,39 @@ export default function Metrics() {
       background: 'rgba(255,255,255,0.02)',
       backdropFilter: 'blur(12px)',
     }}>
-      <div style={{
-        maxWidth: '1200px', margin: '0 auto',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-      }}>
+      <style>{`
+        .metrics-grid {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .metric-item {
+          padding: 56px 40px;
+          text-align: center;
+        }
+        .metric-divider-right {
+          border-right: 1px solid rgba(255,255,255,0.06);
+        }
+        @media (max-width: 640px) {
+          .metrics-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .metric-item {
+            padding: 36px 24px !important;
+          }
+          .metric-divider-right {
+            border-right: none !important;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+          }
+        }
+      `}</style>
+      <div className="metrics-grid">
         {metrics.map((m, i) => (
-          <div key={i} className="reveal" style={{
-            padding: '56px 40px', textAlign: 'center',
-            borderRight: i < metrics.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-          }}>
+          <div
+            key={i}
+            className={`metric-item reveal${i < metrics.length - 1 ? ' metric-divider-right' : ''}`}
+          >
             <div className="gradient-text" style={{
               fontFamily: 'Syne, sans-serif', fontWeight: 800,
               fontSize: 'clamp(36px, 5vw, 60px)',

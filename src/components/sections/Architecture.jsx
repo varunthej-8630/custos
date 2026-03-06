@@ -24,7 +24,7 @@ function NodeCard({ node, isHub = false }) {
 
   return (
     <div
-      className="glass-card"
+      className="glass-card node-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -35,7 +35,9 @@ function NodeCard({ node, isHub = false }) {
         transition: 'all 0.3s ease',
         position: 'relative',
         cursor: 'default',
-        minWidth: isHub ? '280px' : '140px',
+        minWidth: isHub ? '200px' : '120px',
+        flex: isHub ? '0 0 auto' : '1 1 calc(50% - 6px)',
+        maxWidth: isHub ? '280px' : 'none',
       }}
     >
       {isHub && (
@@ -124,6 +126,53 @@ function ConnectorLine({ color = 'rgba(0,200,255,0.4)', vertical = true }) {
 export default function Architecture() {
   return (
     <section className="section-wrapper" style={{ padding: '120px 0', position: 'relative' }}>
+      <style>{`
+        .arch-sensor-row {
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-bottom: 0;
+        }
+        .arch-output-row {
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .arch-hub-row {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 0;
+        }
+        .arch-retrofit {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 28px 36px;
+          gap: 24px;
+          flex-wrap: wrap;
+        }
+        @media (max-width: 640px) {
+          .arch-sensor-row {
+            gap: 8px !important;
+          }
+          .arch-output-row {
+            gap: 8px !important;
+          }
+          .node-card {
+            min-width: 0 !important;
+            padding: 10px 12px !important;
+            font-size: 11px !important;
+          }
+          .arch-retrofit {
+            padding: 20px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+        }
+      `}</style>
+
       {/* Dot grid background */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -156,7 +205,7 @@ export default function Architecture() {
         {/* Architecture diagram */}
         <div className="reveal" style={{ maxWidth: '860px', margin: '0 auto 56px' }}>
           {/* Sensor row */}
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '0' }}>
+          <div className="arch-sensor-row">
             {nodes.sensors.map((node, i) => <NodeCard key={i} node={node} />)}
           </div>
 
@@ -164,7 +213,7 @@ export default function Architecture() {
           <ConnectorLine />
 
           {/* Hub */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0' }}>
+          <div className="arch-hub-row">
             <NodeCard node={nodes.hub} isHub />
           </div>
 
@@ -172,7 +221,7 @@ export default function Architecture() {
           <ConnectorLine />
 
           {/* Output row */}
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div className="arch-output-row">
             {nodes.output.map((node, i) => <NodeCard key={i} node={node} />)}
           </div>
         </div>
@@ -189,10 +238,7 @@ export default function Architecture() {
         </div>
 
         {/* Retrofit callout */}
-        <div className="reveal glass-card" style={{
-          display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '28px 36px', gap: '24px', flexWrap: 'wrap',
+        <div className="reveal glass-card arch-retrofit" style={{
           borderColor: 'rgba(0,200,255,0.15)',
           boxShadow: '-4px 0 20px rgba(0,200,255,0.1)',
           borderLeft: '3px solid rgba(0,200,255,0.5)'

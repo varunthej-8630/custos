@@ -159,18 +159,14 @@ function SceneVehicle() {
 
 const SCENES = [SceneIntruder, SceneElderFall, SceneWeapon, SceneFire, SceneSuspicious, SceneVehicle]
 
-// ── Tabs config (no emoji chars — using colored dots instead) ─
-
 const tabs = [
-  { id: 0, dot: '#FF3B30', label: 'Intruder Detection', detections: [{ label: 'PERSON', conf: '94%', color: '#FF3B30', x: '30%', y: '25%', w: '120px', h: '180px' }], status: 'THREAT DETECTED', statusColor: '#FF3B30', behavior: 'BEHAVIOR: RESTRICTED ZONE ENTRY' },
-  { id: 1, dot: '#FFB800', label: 'Elder Fall Detection', detections: [{ label: 'FALL DETECTED', conf: 'ALERT', color: '#FFB800', x: '25%', y: '48%', w: '180px', h: '100px' }], status: 'EMERGENCY ALERT', statusColor: '#FFB800', behavior: 'BEHAVIOR: FALL - NO MOVEMENT 30s' },
-  { id: 2, dot: '#FF3B30', label: 'Weapon Detection', detections: [{ label: 'PERSON', conf: '91%', color: '#FF3B30', x: '40%', y: '20%', w: '100px', h: '190px' }, { label: 'WEAPON', conf: '88%', color: '#FF3B30', x: '52%', y: '55%', w: '90px', h: '60px' }], status: 'CRITICAL THREAT', statusColor: '#FF3B30', behavior: 'BEHAVIOR: ARMED PERSON - ESCALATING' },
-  { id: 3, dot: '#FF6B00', label: 'Fire & Smoke', detections: [{ label: 'SMOKE', conf: '96%', color: '#FF6B00', x: '55%', y: '10%', w: '180px', h: '120px' }], status: 'FIRE ALERT', statusColor: '#FF6B00', behavior: 'BEHAVIOR: THERMAL EVENT - EVACUATE' },
-  { id: 4, dot: '#00C8FF', label: 'Suspicious Behaviour', detections: [{ label: 'PERSON', conf: '89%', color: '#00C8FF', x: '42%', y: '20%', w: '100px', h: '190px' }], status: 'MONITORING', statusColor: '#00C8FF', behavior: 'BEHAVIOR: LOITERING - 14 MINUTES' },
-  { id: 5, dot: '#00FF88', label: 'Vehicle Tampering', detections: [{ label: 'VEHICLE', conf: '95%', color: '#00FF88', x: '18%', y: '38%', w: '220px', h: '100px' }, { label: 'PERSON', conf: '92%', color: '#FFB800', x: '54%', y: '28%', w: '80px', h: '160px' }], status: 'TAMPERING ALERT', statusColor: '#FFB800', behavior: 'BEHAVIOR: UNAUTHORIZED ACCESS' },
+  { id: 0, dot: '#FF3B30', label: 'Intruder', fullLabel: 'Intruder Detection', detections: [{ label: 'PERSON', conf: '94%', color: '#FF3B30', x: '30%', y: '25%', w: '120px', h: '180px' }], status: 'THREAT DETECTED', statusColor: '#FF3B30', behavior: 'BEHAVIOR: RESTRICTED ZONE ENTRY' },
+  { id: 1, dot: '#FFB800', label: 'Elder Fall', fullLabel: 'Elder Fall Detection', detections: [{ label: 'FALL DETECTED', conf: 'ALERT', color: '#FFB800', x: '25%', y: '48%', w: '180px', h: '100px' }], status: 'EMERGENCY ALERT', statusColor: '#FFB800', behavior: 'BEHAVIOR: FALL - NO MOVEMENT 30s' },
+  { id: 2, dot: '#FF3B30', label: 'Weapon', fullLabel: 'Weapon Detection', detections: [{ label: 'PERSON', conf: '91%', color: '#FF3B30', x: '40%', y: '20%', w: '100px', h: '190px' }, { label: 'WEAPON', conf: '88%', color: '#FF3B30', x: '52%', y: '55%', w: '90px', h: '60px' }], status: 'CRITICAL THREAT', statusColor: '#FF3B30', behavior: 'BEHAVIOR: ARMED PERSON - ESCALATING' },
+  { id: 3, dot: '#FF6B00', label: 'Fire', fullLabel: 'Fire & Smoke', detections: [{ label: 'SMOKE', conf: '96%', color: '#FF6B00', x: '55%', y: '10%', w: '180px', h: '120px' }], status: 'FIRE ALERT', statusColor: '#FF6B00', behavior: 'BEHAVIOR: THERMAL EVENT - EVACUATE' },
+  { id: 4, dot: '#00C8FF', label: 'Suspicious', fullLabel: 'Suspicious Behaviour', detections: [{ label: 'PERSON', conf: '89%', color: '#00C8FF', x: '42%', y: '20%', w: '100px', h: '190px' }], status: 'MONITORING', statusColor: '#00C8FF', behavior: 'BEHAVIOR: LOITERING - 14 MINUTES' },
+  { id: 5, dot: '#00FF88', label: 'Vehicle', fullLabel: 'Vehicle Tampering', detections: [{ label: 'VEHICLE', conf: '95%', color: '#00FF88', x: '18%', y: '38%', w: '220px', h: '100px' }, { label: 'PERSON', conf: '92%', color: '#FFB800', x: '54%', y: '28%', w: '80px', h: '160px' }], status: 'TAMPERING ALERT', statusColor: '#FFB800', behavior: 'BEHAVIOR: UNAUTHORIZED ACCESS' },
 ]
-
-// ── Bounding box ──────────────────────────────────────────────
 
 function BoundingBox({ det, idx }) {
   const [visible, setVisible] = useState(true)
@@ -197,8 +193,6 @@ function BoundingBox({ det, idx }) {
   )
 }
 
-// ── Main ──────────────────────────────────────────────────────
-
 export default function AIIntelligence() {
   const [activeTab, setActiveTab] = useState(0)
   const tab = tabs[activeTab]
@@ -206,6 +200,69 @@ export default function AIIntelligence() {
 
   return (
     <section className="section-wrapper" style={{ padding: '120px 0', background: 'transparent' }}>
+      <style>{`
+        .ai-viewport {
+          height: 380px;
+        }
+        .ai-tabs-wrap {
+          display: flex;
+          gap: 8px;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .ai-tab-btn {
+          background: transparent;
+          border-radius: 100px;
+          padding: 8px 16px;
+          cursor: pointer;
+          font-family: DM Sans, sans-serif;
+          font-size: 13px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          white-space: nowrap;
+        }
+        /* Mobile: scrollable tab row */
+        @media (max-width: 640px) {
+          .ai-viewport {
+            height: 260px !important;
+          }
+          .ai-tabs-wrap {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 6px !important;
+            justify-items: stretch !important;
+          }
+          .ai-tab-btn {
+            padding: 7px 10px !important;
+            font-size: 11px !important;
+            justify-content: center !important;
+            text-align: center !important;
+          }
+          .ai-tab-label-full {
+            display: none;
+          }
+          .ai-tab-label-short {
+            display: inline !important;
+          }
+          .ai-behavior-text {
+            font-size: 8px !important;
+            max-width: 60% !important;
+          }
+          .ai-status-text {
+            font-size: 8px !important;
+            padding: 2px 5px !important;
+          }
+          .ai-timestamp {
+            font-size: 9px !important;
+          }
+        }
+        .ai-tab-label-short {
+          display: none;
+        }
+      `}</style>
+
       <div className="section">
 
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -222,8 +279,13 @@ export default function AIIntelligence() {
 
         {/* Camera viewport */}
         <div className="reveal" style={{ maxWidth: '760px', margin: '0 auto 40px' }}>
-          <div style={{ background: '#0a0a0a', border: '1px solid rgba(0,200,255,0.15)', borderRadius: '16px', position: 'relative', height: '380px', overflow: 'hidden' }}>
-
+          <div className="ai-viewport" style={{
+            background: '#0a0a0a',
+            border: '1px solid rgba(0,200,255,0.15)',
+            borderRadius: '16px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
             {/* Scanlines */}
             <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,200,255,0.012) 2px, rgba(0,200,255,0.012) 4px)', pointerEvents: 'none', zIndex: 5 }} />
 
@@ -238,17 +300,17 @@ export default function AIIntelligence() {
             ))}
 
             {/* Timestamp */}
-            <div style={{ position: 'absolute', top: '16px', left: '24px', fontFamily: 'monospace', fontSize: '11px', color: '#00FF00', zIndex: 6 }}>
+            <div className="ai-timestamp" style={{ position: 'absolute', top: '16px', left: '24px', fontFamily: 'monospace', fontSize: '11px', color: '#00FF00', zIndex: 6 }}>
               CAM_0{activeTab + 1} | LIVE | {new Date().toTimeString().slice(0, 8)}
             </div>
 
             {/* Status */}
-            <div style={{ position: 'absolute', top: '16px', right: '24px', background: tab.statusColor + '22', border: '1px solid ' + tab.statusColor + '66', color: tab.statusColor, fontFamily: 'monospace', fontSize: '10px', padding: '3px 8px', borderRadius: '4px', zIndex: 6, letterSpacing: '1px' }}>
+            <div className="ai-status-text" style={{ position: 'absolute', top: '16px', right: '24px', background: tab.statusColor + '22', border: '1px solid ' + tab.statusColor + '66', color: tab.statusColor, fontFamily: 'monospace', fontSize: '10px', padding: '3px 8px', borderRadius: '4px', zIndex: 6, letterSpacing: '1px' }}>
               {tab.status}
             </div>
 
             {/* Behavior */}
-            <div style={{ position: 'absolute', bottom: '16px', left: '24px', fontFamily: 'monospace', fontSize: '10px', color: tab.statusColor, zIndex: 6, background: 'rgba(0,0,0,0.8)', padding: '4px 8px', borderRadius: '4px' }}>
+            <div className="ai-behavior-text" style={{ position: 'absolute', bottom: '16px', left: '24px', fontFamily: 'monospace', fontSize: '10px', color: tab.statusColor, zIndex: 6, background: 'rgba(0,0,0,0.8)', padding: '4px 8px', borderRadius: '4px' }}>
               {tab.behavior}
             </div>
 
@@ -271,19 +333,22 @@ export default function AIIntelligence() {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="reveal" style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        {/* Tabs — 3-column grid on mobile, wrap on desktop */}
+        <div className="reveal ai-tabs-wrap">
           {tabs.map((t) => (
-            <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
-              background: activeTab === t.id ? 'rgba(0,200,255,0.1)' : 'transparent',
-              border: '1px solid ' + (activeTab === t.id ? 'rgba(0,200,255,0.4)' : 'rgba(255,255,255,0.08)'),
-              borderRadius: '100px', padding: '8px 16px', cursor: 'pointer',
-              color: activeTab === t.id ? '#fff' : 'rgba(255,255,255,0.5)',
-              fontFamily: 'DM Sans', fontSize: '13px', transition: 'all 0.2s ease',
-              display: 'flex', alignItems: 'center', gap: '8px'
-            }}>
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id)}
+              className="ai-tab-btn"
+              style={{
+                background: activeTab === t.id ? 'rgba(0,200,255,0.1)' : 'transparent',
+                border: '1px solid ' + (activeTab === t.id ? 'rgba(0,200,255,0.4)' : 'rgba(255,255,255,0.08)'),
+                color: activeTab === t.id ? '#fff' : 'rgba(255,255,255,0.5)',
+              }}
+            >
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: t.dot, display: 'inline-block', flexShrink: 0 }} />
-              {t.label}
+              <span className="ai-tab-label-full">{t.fullLabel}</span>
+              <span className="ai-tab-label-short">{t.label}</span>
             </button>
           ))}
         </div>

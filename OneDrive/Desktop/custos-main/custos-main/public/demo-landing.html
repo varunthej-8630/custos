@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUSTOS Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#09090c;--ink1:#0d0d11;--ink2:#111116;--ink3:#16161d;--ink4:#1c1c25;
+  --line:#1f1f28;--line2:#27272f;--dim:#44444f;--mid:#6b6b7a;--sub:#9494a8;
+  --txt:#e8e8f0;--white:#f4f4f8;
+  --blue:#3b82f6;--green:#10b981;--amber:#f59e0b;--orange:#f97316;--red:#ef4444;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Syne',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--txt);font-family:var(--sans);font-size:15px;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px;}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{0%{top:-2px}100%{top:102%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(59,130,246,.25)}50%{box-shadow:0 0 40px rgba(59,130,246,.55)}}
+@keyframes modalIn{from{opacity:0;transform:scale(.93) translateY(18px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:60px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+  background:rgba(9,9,12,.9);border-bottom:1px solid rgba(31,31,40,.8);
+  backdrop-filter:blur(14px);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-mark{width:30px;height:30px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:13px;color:#fff;}
+.nav-name{font-family:var(--display);font-size:14px;font-weight:700;color:var(--white);}
+.nav-pill{font-family:var(--mono);font-size:8px;color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);padding:3px 8px;border-radius:20px;letter-spacing:1px;}
+.nav-right{display:flex;align-items:center;gap:14px;}
+.nav-link{font-family:var(--mono);font-size:10px;color:var(--sub);letter-spacing:.5px;transition:color .2s;}
+.nav-link:hover{color:var(--txt);}
+.nav-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.5px;
+  padding:8px 18px;border-radius:6px;background:var(--blue);color:#fff;
+  border:none;cursor:pointer;transition:all .2s;
+}
+.nav-btn:hover{background:#2563eb;transform:translateY(-1px);}
+
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:100px 40px 70px;text-align:center;position:relative;overflow:hidden;
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:1px;
+  background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);
+  padding:7px 16px;border-radius:20px;margin-bottom:30px;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+h1{
+  font-family:var(--display);font-size:clamp(40px,7vw,82px);
+  font-weight:800;color:var(--white);line-height:1.04;letter-spacing:-2px;margin-bottom:14px;
+}
+h1 .accent{color:var(--blue);}
+.hero-sub{font-size:clamp(15px,2vw,19px);color:var(--sub);max-width:540px;line-height:1.65;margin:0 auto 40px;}
+.hero-btns{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-cta{
+  font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;
+  padding:14px 30px;border-radius:8px;background:var(--blue);color:#fff;
+  border:none;cursor:pointer;transition:all .2s;animation:glow 3s ease-in-out infinite;
+}
+.btn-cta:hover{background:#2563eb;transform:translateY(-2px);}
+.btn-ghost{
+  font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;
+  padding:14px 30px;border-radius:8px;background:transparent;color:var(--sub);
+  border:1px solid var(--line2);cursor:pointer;transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--mid);color:var(--txt);}
+.hero-nums{
+  display:flex;align-items:center;gap:36px;margin-top:64px;padding-top:40px;
+  border-top:1px solid var(--line);flex-wrap:wrap;justify-content:center;
+}
+.hero-num-val{font-family:var(--display);font-size:26px;font-weight:800;color:var(--white);}
+.hero-num-lbl{font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.divider{width:1px;height:36px;background:var(--line);}
+
+/* SECTIONS */
+section{max-width:1160px;margin:0 auto;padding:80px 40px;}
+.sec-tag{font-family:var(--mono);font-size:9px;color:var(--blue);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;}
+.sec-title{font-family:var(--display);font-size:clamp(26px,4vw,44px);font-weight:800;color:var(--white);line-height:1.1;margin-bottom:14px;}
+.sec-sub{font-size:15px;color:var(--sub);max-width:480px;line-height:1.7;}
+
+/* MOCKUP */
+.mockup{
+  margin-top:48px;background:var(--ink1);border:1px solid var(--line);border-radius:12px;
+  overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5);
+}
+.mockup-bar{
+  height:42px;background:var(--ink1);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;padding:0 14px;gap:6px;
+}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot.r{background:#ef4444;}.dot.y{background:#f59e0b;}.dot.g{background:#10b981;}
+.mock-url{
+  flex:1;text-align:center;font-family:var(--mono);font-size:10px;color:var(--dim);
+  background:var(--ink3);border:1px solid var(--line);border-radius:20px;
+  padding:3px 16px;max-width:280px;margin:0 auto;
+}
+.mockup-body{display:grid;grid-template-columns:170px 1fr 230px;height:440px;}
+.mock-side{background:var(--ink1);border-right:1px solid var(--line);padding:10px 6px;}
+.mock-logo-row{display:flex;align-items:center;gap:7px;padding:8px;margin-bottom:12px;border-bottom:1px solid var(--line);padding-bottom:12px;}
+.mock-logo-mark{width:22px;height:22px;background:var(--blue);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:9px;font-weight:800;color:#fff;}
+.mock-logo-txt{font-family:var(--display);font-size:10px;font-weight:700;color:var(--white);}
+.mock-ni{display:flex;align-items:center;gap:7px;padding:6px 7px;border-radius:4px;margin-bottom:1px;font-size:10px;color:var(--mid);}
+.mock-ni.on{background:rgba(59,130,246,.1);color:var(--blue);}
+.mock-center{display:flex;flex-direction:column;}
+.mock-topbar{height:42px;background:var(--ink1);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 12px;}
+.mock-topbar-name{font-family:var(--display);font-size:10px;font-weight:700;color:var(--white);}
+.mock-safe{font-family:var(--mono);font-size:8px;padding:3px 9px;border-radius:20px;background:rgba(16,185,129,.08);color:var(--green);border:1px solid rgba(16,185,129,.2);}
+.mock-feed{flex:1;background:#000;position:relative;overflow:hidden;}
+.mock-feed-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a14,#0c1018,#080810);}
+.mock-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.025) 1px,transparent 1px);background-size:28px 28px;}
+.mock-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.5),transparent);animation:scan 2.8s linear infinite;}
+.mock-zone{position:absolute;border:1.5px solid var(--orange);background:rgba(249,115,22,.07);}
+.mock-zone-lbl{position:absolute;top:-16px;left:0;background:var(--orange);color:#000;font-family:var(--mono);font-size:7px;font-weight:700;padding:2px 5px;}
+.mock-det{position:absolute;border:1.5px solid;}
+.mock-det-lbl{position:absolute;top:-16px;left:0;font-family:var(--mono);font-size:7px;font-weight:700;padding:2px 5px;}
+.mock-hud{position:absolute;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.07);padding:2px 7px;border-radius:10px;font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.8);}
+.mock-right{border-left:1px solid var(--line);display:flex;flex-direction:column;}
+.mock-risk{padding:12px;border-bottom:1px solid var(--line);}
+.mock-risk-lbl{font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:2px;margin-bottom:8px;}
+.mock-risk-num{font-family:var(--display);font-size:42px;font-weight:800;color:var(--green);line-height:1;letter-spacing:-2px;}
+.mock-track{height:2px;background:var(--line2);border-radius:2px;margin:6px 0;}
+.mock-fill{height:100%;border-radius:2px;background:var(--green);}
+.mock-status{font-family:var(--mono);font-size:8px;color:var(--green);margin-bottom:8px;}
+.mock-behs{display:flex;flex-wrap:wrap;gap:3px;}
+.mock-beh{font-family:var(--mono);font-size:6px;padding:2px 6px;border-radius:20px;background:var(--ink4);color:var(--dim);border:1px solid var(--line);}
+.mock-beh.hot{background:rgba(249,115,22,.1);color:var(--orange);border-color:rgba(249,115,22,.3);}
+.mock-tl{flex:1;padding:10px;}
+.mock-tl-lbl{font-family:var(--mono);font-size:7px;color:var(--dim);letter-spacing:2px;margin-bottom:7px;}
+.mock-tl-item{padding:6px 7px;border-radius:3px;margin-bottom:4px;background:var(--ink3);border-left:2px solid var(--red);}
+.mock-tl-type{font-family:var(--mono);font-size:7px;color:var(--red);margin-bottom:1px;}
+.mock-tl-desc{font-size:8px;color:var(--sub);}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px;}
+.feat{background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:22px;transition:all .25s;}
+.feat:hover{border-color:var(--line2);transform:translateY(-3px);background:var(--ink3);}
+.feat-icon{
+  width:38px;height:38px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:14px;
+}
+.feat-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--white);margin-bottom:7px;}
+.feat-desc{font-size:12px;color:var(--sub);line-height:1.65;}
+
+/* STEPS */
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;position:relative;}
+.steps-row::before{content:'';position:absolute;top:27px;left:12%;right:12%;height:1px;background:var(--line2);}
+.step-item{text-align:center;padding:0 14px;}
+.step-circle{
+  width:54px;height:54px;border-radius:50%;
+  border:1px solid var(--line2);background:var(--ink2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:500;color:var(--blue);
+  margin:0 auto 14px;position:relative;z-index:1;transition:all .3s;
+}
+.step-item:hover .step-circle{background:var(--blue);color:#fff;border-color:var(--blue);}
+.step-name{font-family:var(--display);font-size:13px;font-weight:700;color:var(--white);margin-bottom:5px;}
+.step-desc{font-size:12px;color:var(--sub);line-height:1.6;}
+
+/* CREDENTIALS */
+.creds-wrap{
+  background:var(--ink2);border:1px solid var(--line);border-radius:12px;
+  padding:36px;display:flex;align-items:center;justify-content:space-between;
+  gap:32px;flex-wrap:wrap;margin-top:48px;
+}
+.creds-left h3{font-family:var(--display);font-size:20px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.creds-left p{font-size:13px;color:var(--sub);line-height:1.65;max-width:380px;}
+.creds-list{display:flex;flex-direction:column;gap:10px;min-width:280px;}
+.cred-row{display:flex;align-items:center;gap:14px;background:var(--ink3);border:1px solid var(--line);border-radius:8px;padding:11px 14px;}
+.cred-lbl{font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;width:72px;flex-shrink:0;}
+.cred-val{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--blue);flex:1;}
+.cred-copy{font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:4px;border:1px solid var(--line2);background:transparent;color:var(--sub);cursor:pointer;transition:all .2s;}
+.cred-copy:hover{border-color:var(--blue);color:var(--blue);}
+.cred-copy.ok{border-color:var(--green);color:var(--green);}
+
+/* CTA BAND */
+.cta-band{
+  text-align:center;padding:100px 40px;
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(59,130,246,.07),transparent);
+  border-top:1px solid var(--line);
+}
+.cta-band h2{font-family:var(--display);font-size:clamp(26px,5vw,54px);font-weight:800;color:var(--white);margin-bottom:14px;line-height:1.08;}
+.cta-band p{font-size:16px;color:var(--sub);margin:0 auto 32px;max-width:460px;line-height:1.65;}
+.cta-note{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;color:var(--amber);
+  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);
+  padding:7px 14px;border-radius:20px;margin-bottom:28px;
+}
+
+/* FOOTER */
+footer{
+  padding:24px 40px;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.foot-right{font-family:var(--mono);font-size:9px;color:var(--dim);}
+
+/* MODAL */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.9);z-index:9999;
+  align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(8px);
+}
+.modal-bg.on{display:flex;}
+.modal-box{
+  background:var(--ink2);border:1px solid var(--line2);
+  border-radius:14px;padding:36px;
+  max-width:460px;width:100%;
+  animation:modalIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+.modal-cam-icon{
+  width:64px;height:64px;background:rgba(59,130,246,.1);
+  border:1px solid rgba(59,130,246,.2);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;font-size:20px;color:var(--blue);
+  margin:0 auto 20px;animation:float 3s ease-in-out infinite;
+}
+.modal-h{font-family:var(--display);font-size:20px;font-weight:700;color:var(--white);text-align:center;margin-bottom:8px;}
+.modal-p{font-size:13px;color:var(--sub);text-align:center;line-height:1.65;margin-bottom:24px;}
+.modal-checklist{display:flex;flex-direction:column;gap:9px;margin-bottom:26px;}
+.modal-check{
+  display:flex;align-items:center;gap:11px;
+  background:var(--ink3);border:1px solid var(--line);border-radius:8px;padding:11px 13px;
+}
+.modal-check-n{
+  width:22px;height:22px;border-radius:50%;background:var(--blue);
+  color:#fff;font-family:var(--mono);font-size:10px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.modal-check-t{font-size:13px;color:var(--txt);}
+.modal-check-t b{font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:500;}
+.modal-launch{
+  width:100%;padding:14px;background:var(--blue);color:#fff;
+  border:none;border-radius:8px;font-family:var(--mono);
+  font-size:12px;font-weight:500;letter-spacing:.5px;
+  cursor:pointer;transition:all .2s;margin-bottom:8px;
+}
+.modal-launch:hover{background:#2563eb;transform:translateY(-1px);}
+.modal-cancel{
+  width:100%;padding:9px;background:transparent;color:var(--sub);
+  border:1px solid var(--line2);border-radius:8px;
+  font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;
+}
+.modal-cancel:hover{border-color:var(--mid);color:var(--txt);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-right .nav-link{display:none;}
+  section{padding:60px 20px;}
+  .features-grid{grid-template-columns:1fr 1fr;}
+  .steps-row{grid-template-columns:1fr 1fr;gap:24px;}
+  .steps-row::before{display:none;}
+  .mockup-body{grid-template-columns:1fr;height:auto;}
+  .mock-side,.mock-right{display:none;}
+  .mock-feed{height:220px;}
+  .creds-wrap{flex-direction:column;}
+  .cta-band{padding:60px 20px;}
+  .hero{padding:90px 20px 60px;}
+}
+@media(max-width:600px){
+  h1{letter-spacing:-1px;}
+  .features-grid{grid-template-columns:1fr;}
+  .steps-row{grid-template-columns:1fr;}
+  .hero-nums{gap:18px;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-mark">C</div>
+    <div class="nav-name">CUSTOS</div>
+    <div class="nav-pill">LIVE DEMO</div>
+  </div>
+  <div class="nav-right">
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#access" class="nav-link">Access</a>
+    <button class="nav-btn" onclick="openModal()">Try Live Demo</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home" style="max-width:100%;padding:100px 40px 70px;">
+  <div class="hero-grid"></div>
+  <div class="hero-badge"><span class="badge-dot"></span>YOLOv8 Real-time Detection</div>
+  <h1>Your Space,<br><span class="accent">Under Watch.</span></h1>
+  <p class="hero-sub">CUSTOS detects anomalies in real time using your own USB camera. Pacing, crouching, zone intrusions — caught instantly. No cloud. No server. 100% browser.</p>
+  <div class="hero-btns">
+    <button class="btn-cta" onclick="openModal()">Try Live Demo</button>
+    <button class="btn-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">See Features</button>
+  </div>
+  <div class="hero-nums">
+    <div><div class="hero-num-val">YOLOv8n</div><div class="hero-num-lbl">AI Model</div></div>
+    <div class="divider"></div>
+    <div><div class="hero-num-val">100%</div><div class="hero-num-lbl">Browser</div></div>
+    <div class="divider"></div>
+    <div><div class="hero-num-val">0</div><div class="hero-num-lbl">Servers</div></div>
+    <div class="divider"></div>
+    <div><div class="hero-num-val">6+</div><div class="hero-num-lbl">Behaviours</div></div>
+    <div class="divider"></div>
+    <div><div class="hero-num-val">10s</div><div class="hero-num-lbl">Video Clips</div></div>
+  </div>
+</section>
+
+<!-- MOCKUP -->
+<section id="preview">
+  <div class="sec-tag">Dashboard Preview</div>
+  <div class="sec-title">Everything visible,<br>nothing missed.</div>
+  <div class="sec-sub">Live feed, real-time bounding boxes, risk score, zone alerts, and evidence — all in one screen.</div>
+  <div class="mockup">
+    <div class="mockup-bar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <div class="mock-url">localhost:8080 — CUSTOS Dashboard</div>
+    </div>
+    <div class="mockup-body">
+      <div class="mock-side">
+        <div class="mock-logo-row"><div class="mock-logo-mark">C</div><div class="mock-logo-txt">CUSTOS</div></div>
+        <div class="mock-ni on">[D] Dashboard</div>
+        <div class="mock-ni">[O] Monitor</div>
+        <div class="mock-ni">[!] Alerts</div>
+        <div class="mock-ni">[#] Evidence</div>
+        <div class="mock-ni">[~] Analytics</div>
+      </div>
+      <div class="mock-center">
+        <div class="mock-topbar">
+          <div class="mock-topbar-name">CUSTOS PERIMETER</div>
+          <div class="mock-safe">SAFE</div>
+        </div>
+        <div class="mock-feed">
+          <div class="mock-feed-bg"></div>
+          <div class="mock-grid"></div>
+          <div class="mock-scan"></div>
+          <div class="mock-zone" style="left:12%;top:8%;width:58%;height:72%;"><span class="mock-zone-lbl">Z1 OBSERVATION</span></div>
+          <div class="mock-det" style="left:18%;top:16%;width:20%;height:54%;border-color:#3b82f6;"><span class="mock-det-lbl" style="background:#3b82f6;color:#fff;">#1 18s</span></div>
+          <div class="mock-det" style="left:50%;top:22%;width:15%;height:44%;border-color:#10b981;"><span class="mock-det-lbl" style="background:#10b981;color:#000;">#2 OK</span></div>
+          <div class="mock-hud" style="top:8px;left:8px;">REC · CAM-01</div>
+          <div class="mock-hud" style="bottom:8px;left:8px;">18 FPS</div>
+          <div class="mock-hud" style="bottom:8px;right:8px;">2 persons</div>
+        </div>
+      </div>
+      <div class="mock-right">
+        <div class="mock-risk">
+          <div class="mock-risk-lbl">RISK SCORE</div>
+          <div class="mock-risk-num">24</div>
+          <div class="mock-track"><div class="mock-fill" style="width:24%;"></div></div>
+          <div class="mock-status">SAFE</div>
+          <div class="mock-behs">
+            <div class="mock-beh hot">PACING</div>
+            <div class="mock-beh">CROUCH</div>
+            <div class="mock-beh">LINGER</div>
+            <div class="mock-beh">FREEZE</div>
+          </div>
+        </div>
+        <div class="mock-tl">
+          <div class="mock-tl-lbl">ALERT TIMELINE</div>
+          <div class="mock-tl-item">
+            <div class="mock-tl-type">HIGH 12:44:01</div>
+            <div class="mock-tl-desc">Zone intrusion</div>
+          </div>
+          <div class="mock-tl-item" style="border-left-color:var(--orange);">
+            <div class="mock-tl-type" style="color:var(--orange);">OBS 12:38:22</div>
+            <div class="mock-tl-desc">Person pacing</div>
+          </div>
+          <div class="mock-tl-item" style="border-left-color:var(--orange);">
+            <div class="mock-tl-type" style="color:var(--orange);">OBS 12:31:05</div>
+            <div class="mock-tl-desc">Lingering 60s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="sec-tag">Capabilities</div>
+  <div class="sec-title">Built to catch what<br>matters most.</div>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-icon" style="background:rgba(59,130,246,.12);color:var(--blue);">AI</div>
+      <div class="feat-title">Real-time YOLO Detection</div>
+      <div class="feat-desc">YOLOv8n runs in your browser via WebAssembly. Camera feed never leaves your device — zero uploads, zero privacy risk.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" style="background:rgba(249,115,22,.12);color:var(--orange);">ZN</div>
+      <div class="feat-title">Custom Zone Drawing</div>
+      <div class="feat-desc">Draw HIGH SECURITY or OBSERVATION zones by dragging on the live feed. Alerts only fire inside zones you define.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" style="background:rgba(16,185,129,.12);color:var(--green);">RS</div>
+      <div class="feat-title">Risk Score Engine</div>
+      <div class="feat-desc">A live 0-100 score tracks pacing, crouching, lingering, freezing, running, and repeated entries to detect anomalies.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" style="background:rgba(239,68,68,.12);color:var(--red);">AL</div>
+      <div class="feat-title">Instant Alerts</div>
+      <div class="feat-desc">Alert banner fires with sound the moment risk crosses your threshold. No delay, no lag on the notification.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" style="background:rgba(245,158,11,.12);color:var(--amber);">EV</div>
+      <div class="feat-title">Evidence Gallery</div>
+      <div class="feat-desc">Every alert saves a clean screenshot and a 10-second video clip you can download instantly — no boxes on the photo.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" style="background:rgba(139,92,246,.12);color:#8b5cf6;">TM</div>
+      <div class="feat-title">Tamper Detection</div>
+      <div class="feat-desc">Detects camera cover or obstruction using brightness and image uniformity analysis. Fires a tamper alert immediately.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="sec-tag">How it works</div>
+  <div class="sec-title">Up and running<br>in 4 steps.</div>
+  <div class="steps-row">
+    <div class="step-item">
+      <div class="step-circle">01</div>
+      <div class="step-name">Connect Camera</div>
+      <div class="step-desc">Plug in any USB webcam or use your built-in camera. Browser asks for permission once.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-circle">02</div>
+      <div class="step-name">Draw Zones</div>
+      <div class="step-desc">Click and drag on the live feed to draw HIGH or OBSERVATION zones where you want monitoring.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-circle">03</div>
+      <div class="step-name">Start Monitoring</div>
+      <div class="step-desc">Click Monitor. YOLO starts detecting people and tracking their behaviour in real time.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-circle">04</div>
+      <div class="step-name">Get Alerts</div>
+      <div class="step-desc">Anomaly detected - alert fires with sound, clean screenshot, and 10-second video clip.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDENTIALS -->
+<section id="access" style="padding-top:20px;">
+  <div class="sec-tag">Access</div>
+  <div class="sec-title">Your credentials<br>to get in.</div>
+  <div class="creds-wrap">
+    <div class="creds-left">
+      <h3>Login Required</h3>
+      <p>The demo is protected by a login screen. Use these credentials to access the full dashboard. The system runs entirely in your browser.</p>
+    </div>
+    <div class="creds-list">
+      <div class="cred-row">
+        <div class="cred-lbl">Username</div>
+        <div class="cred-val">admin</div>
+        <button class="cred-copy" onclick="copyVal('admin',this)">Copy</button>
+      </div>
+      <div class="cred-row">
+        <div class="cred-lbl">Password</div>
+        <div class="cred-val">custos123</div>
+        <button class="cred-copy" onclick="copyVal('custos123',this)">Copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>Ready to see it live?</h2>
+  <p>Connect your USB camera and experience CUSTOS detecting anomalies in real time — right in your browser.</p>
+  <div class="cta-note">USB or built-in camera required</div><br>
+  <button class="btn-cta" onclick="openModal()" style="font-size:13px;padding:16px 40px;">Launch Live Demo</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="nav-logo">
+    <div class="nav-mark">C</div>
+    <div class="nav-name">CUSTOS</div>
+    <div class="nav-pill">BY PARIMI VARUN THEJ</div>
+  </div>
+  <div class="foot-right">Asset Interaction Anomaly Detection &mdash; Powered by YOLOv8</div>
+</footer>
+
+<!-- USB MODAL -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-cam-icon">[CAM]</div>
+    <div class="modal-h">Before You Launch</div>
+    <div class="modal-p">Make sure your camera is ready. Everything runs 100% in your browser — nothing is uploaded or stored anywhere.</div>
+    <div class="modal-checklist">
+      <div class="modal-check">
+        <div class="modal-check-n">1</div>
+        <div class="modal-check-t">Plug in your <b>USB camera</b> or use your built-in webcam</div>
+      </div>
+      <div class="modal-check">
+        <div class="modal-check-n">2</div>
+        <div class="modal-check-t">Allow <b>camera permission</b> when the browser asks</div>
+      </div>
+      <div class="modal-check">
+        <div class="modal-check-n">3</div>
+        <div class="modal-check-t">Login with <b>admin</b> and password <b>custos123</b></div>
+      </div>
+      <div class="modal-check">
+        <div class="modal-check-n">4</div>
+        <div class="modal-check-t">Draw a zone on the feed and click <b>Monitor</b></div>
+      </div>
+    </div>
+    <button class="modal-launch" onclick="launchDemo()">Launch CUSTOS Demo</button>
+    <button class="modal-cancel" onclick="closeModal()">Not now</button>
+  </div>
+</div>
+
+<script>
+function openModal(){
+  document.getElementById('modal').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('on');
+  document.body.style.overflow='';
+}
+function launchDemo(){
+  closeModal();
+  window.open('demo.html','_blank');
+}
+function copyVal(text,btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied!';
+    btn.classList.add('ok');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('ok'); },2000);
+  });
+}
+
+// Scroll fade-in
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='1';
+      e.target.style.transform='translateY(0)';
+    }
+  });
+},{threshold:.08});
+document.querySelectorAll('.feat,.step-item,.creds-wrap,.mockup').forEach(el=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(20px)';
+  el.style.transition='opacity .6s ease, transform .6s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>
